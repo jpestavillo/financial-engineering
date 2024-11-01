@@ -1,0 +1,45 @@
+clear all;
+close all;
+clc;
+
+%% Cargar los datos
+data=xlsread('hapiness.xlsx','hapiness','a2:g144'); %carga los datos del archivo
+%load hapiness.txt
+
+%% Regresion Logistica
+X=data(:,[2,3,4,5,6,7]);
+Y=data(:,1);
+n=size(X,1); %Cantidad de datos
+
+%Xa=[ones(n,1) X X.^2];
+[Xa Forma]=func_polinomio(X,2);
+W=zeros(size(Xa,2),1); %Pesos iniciales
+[J,dJdW]=fun_costob(W,Xa,Y); %Calculo de J y W
+
+options=optimset('GradObj','on','MaxIter',1000);
+
+[Wopt,Jopt]=fminunc(@(W)fun_costob(W,Xa,Y),W,options);
+
+%% Simulaci?n del modelo obtenido
+V=Xa*Wopt;
+Yg=1./(1+exp(-V));
+%Yg=(Yg>=0.5); %Coniverte en unos y ceros
+Yg=round(Yg);
+TP=sum((Y==1)&(Yg==1)); %True Positive
+TN=sum((Y==0)&(Yg==0)); %True Negative
+FP=sum((Y==0)&(Yg==1)); %False Positive
+FN=sum((Y==1)&(Yg==0)); %False Negative1
+
+Accu=(TP+TN)/(TP+TN+FP+FN); %Exactitud
+Prec=TP/(TP+FP); %Precisi?n
+Rec=TP/(TP+FN); %Recall
+
+[Accu Prec Rec]
+% 
+% newdata=xlsread('Datainmuno.xlsx','Hoja1','a96:g98');
+% xtest=newdata(:,3:5);
+% Xatest=func_polinomio(xtest,2);
+% Vtest=Xatest*Wopt;
+% Ygtest=1./(1+exp(-Vtest));
+% Ygtest=round(Ygtest)
+

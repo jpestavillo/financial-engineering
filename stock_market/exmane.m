@@ -1,0 +1,8 @@
+cupon=xlsread('examen','BonosM','e4:e27')
+ytm=xlsread('examen','BonosM','f4:f27')
+fechas=xlsread('examen','BonosM','d4:d27')
+vencimientos=x2mdate(fechas,0)
+precio=bndprice(ytm,cupon,'05-05-2017',vencimientos)
+duracionmodificada=bnddury(ytm,cupon,'05-05-2017',vencimientos)
+preciosisube=bndprice(ytm+.0005,cupon,'05-05-2017',vencimientos)
+preciosibaja=bndprice(ytm-.0005,cupon,'05-05-2017',vencimientos)
