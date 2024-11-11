@@ -1,0 +1,47 @@
+clear all; %limpia todas las variables
+close all; %cierra todas las ventanas
+clc; %limpia el espacio de trabajo
+%poblacion inicial 
+%evaluarlos 
+%seleccionar 
+%cruzar 
+%mutar 
+%sustituir
+
+nbits=8; %cantidad de bits
+np=8; %numero de pobladores
+
+xpadres=randi([0,255],np,1); %random numbers integers between 0 and 255, np numbers and 1
+for n=1:100
+    y=xpadres.^2 %al ser vector, el punto aplica la operacion a cada elemento. 
+    yprom=mean(y);
+    %cromosoma 
+    cromosoma=sortrows([xpadres y],2); %ordena por renglones
+
+    %%selección 
+    padresbin=de2bi(cromosoma(np/2+1:np,1),nbits); %de2bi convierte a binario  nbits forza  aque sean de la longitud de nbits
+    
+    %cruzamiento 
+    for k=1 :(nbits/4)
+        n=randi([2,nbits-1]) %un punto de cruce 
+        n2=randi([2,nbits-1])
+        hijobin(2*k-1,:)=[padresbin(2*k-1,1:n) padresbin(2*k,n+1:nbits)]
+        hijobin(2*k,:)=[padresbin(2*k,1:n) padresbin(2*k-1,n+1:nbits)]
+    end
+%% mutacion 
+    na=rand();
+    if na>=.8
+        nhijo=randi(np/2);
+        nbit=randi(nbits);
+        if hijobin(nhijo,nbit)==1
+           hijobin(nhijo,nbit)=0;
+        else 
+            hijobin(nhijo,nbit)=1;
+        end
+    end
+    
+    hijodec=bi2de(hijobin); %convierte de binario a decimal 
+    xpadres=[cromosoma(np/2+1:np,1); hijodec] %sustitución generacional
+end
+plot(yprom)
+max(y)

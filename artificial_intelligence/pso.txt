@@ -1,0 +1,66 @@
+%pso
+clear all ;
+close all ;
+clc;
+
+np=50; %numero de particulas 
+%% solo para este ejercicio (no va)
+x=-10:.1:10;
+y=10+x.^2-15*cos(5*x);
+
+%% parametros 
+x1p=rand(np,1);
+%pso
+clear all ;
+close all ;
+clc;
+
+np=50; %numero de particulas 
+%% solo para este ejercicio (no va)
+x=-10:.1:10;
+y=10+x.^2-15*cos(5*x);
+
+%% parametros 
+x1p=rand(np,1);
+x1pg=0; %la posicion inicial del mejor global ;
+x1pl=x1p; %valores iniciales de los mejores locales 
+vx1=zeros(np,1); %velocidad inicial de cada partícula 
+
+fxpg=1000000; %desempeño inicial del mejor global 
+fxpl= ones(np,1)*fxpg; %desempeño inicial de locales 
+
+c1=.75; %velocidad de convergencia al mejor local 
+c2=.75; %velocidad de convergencia al mejor global
+
+for k=1:100
+    fx=10+x1p.^2-15*cos(5*x1p); %funcion de desempeño 
+    
+    [val,ind]=min(fx) %minimo de la funcion y su posición 
+    
+    if val<fxpg
+        x1pg=x1p(ind,1);
+        fxpg=val;
+    end
+
+
+    %determinar los mejores locales 
+    for p=1:np %para cada particula 
+        if fx(p,1)<fxpl(p,1) %compara el desempeño con el mejor de las particulas 
+            fxpl(p,1)=fx(p,1); %actualiza el desempeño 
+            x1pl(p,1)=x1p(p,1); %actualiza posición  
+        end 
+    end 
+       
+    %% no va, solo para graficar 
+    plot (x,y,'b-',x1p,fx,'rx',x1pg,fxpg,'go');
+    %tercer parámetro es el color y el tipo de linea 
+    axis([-10 10 -20 120]);
+    title(['x1pg=' num2str(x1pg) 'y=' num2str(fxpg)]);
+    pause(.1);
+
+    %% 
+    vxl=vx1+cl*rand()*(x1pg-x1p)+c2*rand()*(x1pl-xlp);
+    x1p=x1p+vx1;
+    
+    
+end
