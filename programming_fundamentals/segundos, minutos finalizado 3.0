@@ -1,0 +1,11 @@
+Proceso sin_titulo
+	definir seg,minutos,horas,sobranteseg ,sobranteminutos Como Real;
+	escribir "cuantos segundos han pasado?" ; 
+	leer seg ;
+	sobranteseg<- seg mod 60 ;
+	minutos<- trunc(seg/60);
+	sobranteminutos<- minutos mod 60 ;
+	horas<- trunc(seg/3600) ;
+	Escribir  horas, ":" , sobranteminutos, ":" , sobranteseg ;
+FinProceso
+
